@@ -10,26 +10,33 @@ void cout_bin(uint64_t buf);
 int main()
 {
 
-		uint64_t M = 0;
-		uint64_t N = 0;
-		int i1 = 0;
-		int i2 = 0;
-		cin_bin(&N);
-		cin_bin(&M);
-		scanf("%d" , &i1);
-		scanf("%d" , &i2);
+	uint64_t M = 0;
+	uint64_t N = 0;
+	int i1 = 0;
+	int i2 = 0;
+	cin_bin(&N);
+	cin_bin(&M);
+	scanf("%d" , &i1);
+	scanf("%d" , &i2);
 
-		int dif = i2 - i1 + 1;
-		
+	int dif = i2 - i1 + 1;
+
+	M = M & (((uint64_t)1 << dif) - 1);
+	if (M > N)
+	{
+		N = M;
+	}
+	else
+	{
 		uint64_t M1 = ~(((1 << dif) - 1) << i1);
 		N &= M1;
 
-		M = M & ((1 << dif) - 1);
 		uint64_t M2 = M << i1;
 		N |= M2;
+	}
 
-		cout_bin(N);
-		printf("\n");
+	cout_bin(N);
+	printf("\n");
 	return 0;
 }
 
