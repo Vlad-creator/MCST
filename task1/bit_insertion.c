@@ -24,7 +24,7 @@ int main()
 	M = M & (((uint64_t)1 << dif) - 1);
 	if (M > N)
 	{
-		N = M;
+		N = M << i1;
 	}
 	else
 	{
