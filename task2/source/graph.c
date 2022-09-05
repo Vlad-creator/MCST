@@ -89,7 +89,6 @@ void BFS(node_t* start , matrix_t* matr , int num_nodes)
 	int* marks = (int*)calloc(num_nodes , sizeof(int));
 	queue_t* q = create_queue(num_nodes);
 	push(q , start);
-	printf("%d\n" , q->num);
 	marks[start->num] = 1;
 	matr->matr_buf[start->num][start->num] = 1;
 	while(q->num != 0)
