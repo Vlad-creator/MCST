@@ -1,12 +1,5 @@
 #include "../include/matrix.h"
 
-struct matrix
-{
-	int** matr_buf;
-	int num_str;
-	int num_clm;
-};
-
 matrix_t* create_matrix(int n_str , int n_clm)
 {
 	matrix_t* matr = (matrix_t*)calloc(1 , sizeof(matrix_t));

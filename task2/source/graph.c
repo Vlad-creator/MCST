@@ -1,25 +1,5 @@
 #include "../include/graph.h"
 
-struct node
-{
-	int size;
-	int num;
-	int n_curves;
-	curve_t** out_curves;
-};
-
-struct curve
-{
-	node_t* parent;
-	node_t* child;
-};
-
-struct pair
-{
-	int parent;
-	int child;
-};
-
 void read_pair(pair_t** pair)
 {
 	*pair = (pair_t*)calloc(1 , sizeof(pair_t));
@@ -104,7 +84,27 @@ void delete_graph(node_t** nodes , int num_nodes)
 	free(nodes);
 }
 
-/*void BFS(node_t* start , matrix_t* matr)
+void BFS(node_t* start , matrix_t* matr , int num_nodes)
 {
-
-}*/
+	int* marks = (int*)calloc(num_nodes , sizeof(int));
+	queue_t* q = create_queue(num_nodes);
+	push(q , start);
+	printf("%d\n" , q->num);
+	marks[start->num] = 1;
+	matr->matr_buf[start->num][start->num] = 1;
+	while(q->num != 0)
+	{
+		node_t* per = pop(q);
+		for (int i = 0 ; i < per->size ; ++i)
+		{
+			if (marks[per->out_curves[i]->child->num] == 0)
+			{
+				marks[per->out_curves[i]->child->num] = 1;
+				matr->matr_buf[per->out_curves[i]->child->num][start->num] = 1;
+				push(q , per->out_curves[i]->child);
+			}
+		}
+	}
+	delete_queue(q);
+	free(marks);
+}
