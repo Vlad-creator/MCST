@@ -20,19 +20,26 @@ int main()
 	scanf("%d" , &i2);
 
 	int dif = i2 - i1 + 1;
-
-	M = M & (((uint64_t)1 << dif) - 1);
-	if (M > N)
+	if (dif == 64)
 	{
-		N = M << i1;
+		N = M;
 	}
 	else
 	{
-		uint64_t M1 = ~((((uint64_t)1 << dif) - 1) << i1);
-		N &= M1;
+		M = M & (((uint64_t)1 << dif) - 1);
+		printf("\n\n");
+		if (M > N)
+		{
+			N = M << i1;
+		}
+		else
+		{
+			uint64_t M1 = ~((((uint64_t)1 << dif) - 1) << i1);
+			N &= M1;
 
-		uint64_t M2 = M << i1;
-		N |= M2;
+			uint64_t M2 = M << i1;
+			N |= M2;
+		}
 	}
 
 	cout_bin(N);
