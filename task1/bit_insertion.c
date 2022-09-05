@@ -28,7 +28,7 @@ int main()
 	}
 	else
 	{
-		uint64_t M1 = ~(((1 << dif) - 1) << i1);
+		uint64_t M1 = ~((((uint64_t)1 << dif) - 1) << i1);
 		N &= M1;
 
 		uint64_t M2 = M << i1;
