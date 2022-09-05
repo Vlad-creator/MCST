@@ -53,7 +53,9 @@ node_t** create_graph(int num_nodes , int num_curves , pair_t** pairs)
 	for(int i = 0 ; i < num_curves ; ++i)
 	{
 		add_curve(nodes[pairs[i]->parent] , create_curve(nodes[pairs[i]->parent] , nodes[pairs[i]->child]));
+		free(pairs[i]);
 	}
+	free(pairs);
 	return nodes;
 }
 
@@ -84,23 +86,34 @@ void delete_graph(node_t** nodes , int num_nodes)
 	free(nodes);
 }
 
-void BFS(node_t* start , matrix_t* matr , int num_nodes)
+void BFS(node_t* start , matrix_t* matr , int num_nodes , int* glb_marks)
 {
 	int* marks = (int*)calloc(num_nodes , sizeof(int));
 	queue_t* q = create_queue(num_nodes);
 	push(q , start);
 	marks[start->num] = 1;
-	matr->matr_buf[start->num][start->num] = 1;
+	matr->matr_buf[start->num][start->num] = '1';
 	while(q->num != 0)
 	{
 		node_t* per = pop(q);
-		for (int i = 0 ; i < per->size ; ++i)
+		if (glb_marks[per->num] == 1)
 		{
-			if (marks[per->out_curves[i]->child->num] == 0)
+			//printf("\n%d\n" , per->num);
+			for (int i = per->num ; i < num_nodes ; ++i)
 			{
-				marks[per->out_curves[i]->child->num] = 1;
-				matr->matr_buf[per->out_curves[i]->child->num][start->num] = 1;
-				push(q , per->out_curves[i]->child);
+				matr->matr_buf[i][start->num] = matr->matr_buf[i][per->num];
+			}
+		}
+		else
+		{
+			for (int i = 0 ; i < per->size ; ++i)
+			{
+				if (marks[per->out_curves[i]->child->num] == 0)
+				{
+					marks[per->out_curves[i]->child->num] = 1;
+					matr->matr_buf[per->out_curves[i]->child->num][start->num] = '1';
+					push(q , per->out_curves[i]->child);
+				}
 			}
 		}
 	}
