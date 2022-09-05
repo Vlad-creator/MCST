@@ -1,5 +1,5 @@
 CXX = gcc
-CXXFLAGS = -c -Wall -O0
+CXXFLAGS = -c -Wall -O3
 
 .PHONY: clean
 

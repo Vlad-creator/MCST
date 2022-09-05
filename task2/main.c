@@ -15,17 +15,21 @@ int main()
 	}
 	node_t** nodes = create_graph(num_nodes , num_curves , pairs);
 	matrix_t* matr = create_matrix(num_nodes , num_nodes);
+	int* global_marks = (int*)calloc(num_nodes , sizeof(int));
 	for (int i = 0 ; i < num_nodes ; ++i)
 	{
-		BFS(nodes[i] , matr , num_nodes);
+		BFS(nodes[num_nodes - i - 1] , matr , num_nodes , global_marks);
+		global_marks[num_nodes - i - 1] = 1;
+		/*for (int i = 0 ; i < num_nodes ; ++i)
+		{
+			printf("%d " , global_marks[i]);
+		}
+		printf("\n\n");
+		print_matrix(matr);*/
 	}
 	delete_graph(nodes , num_nodes);
-	for (int i = 0 ; i < num_curves ; ++i)
-	{
-		free(pairs[i]);
-	}
-	free(pairs);
 	print_matrix(matr);
 	delete_matrix(matr);
+	free(global_marks);
 	return 0;
 }
