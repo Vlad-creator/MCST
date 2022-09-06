@@ -98,10 +98,10 @@ void BFS(node_t* start , matrix_t* matr , int num_nodes , int* glb_marks)
 		node_t* per = pop(q);
 		if (glb_marks[per->num] == 1)
 		{
-			//printf("\n%d\n" , per->num);
 			for (int i = per->num ; i < num_nodes ; ++i)
 			{
-				matr->matr_buf[i][start->num] = matr->matr_buf[i][per->num];
+				if (matr->matr_buf[i][start->num] == '0')
+					matr->matr_buf[i][start->num] = matr->matr_buf[i][per->num];
 			}
 		}
 		else
