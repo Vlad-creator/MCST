@@ -27,19 +27,12 @@ int main()
 	else
 	{
 		M = M & (((uint64_t)1 << dif) - 1);
-		printf("\n\n");
-		if (M > N)
-		{
-			N = M << i1;
-		}
-		else
-		{
-			uint64_t M1 = ~((((uint64_t)1 << dif) - 1) << i1);
-			N &= M1;
+		
+		uint64_t M1 = ~((((uint64_t)1 << dif) - 1) << i1);
+		N &= M1;
 
-			uint64_t M2 = M << i1;
-			N |= M2;
-		}
+		uint64_t M2 = M << i1;
+		N |= M2;
 	}
 
 	cout_bin(N);
