@@ -1,10 +1,10 @@
 #include "../include/graph.h"
 
-void read_pair(pair_t** pair)
+void read_pair(pair_t** pair , int* counters)
 {
 	*pair = (pair_t*)calloc(1 , sizeof(pair_t));
-	scanf("%d" , &((*pair)->parent));
-	scanf("%d" , &((*pair)->child));
+	scanf("%d %d" , &((*pair)->parent) , &((*pair)->child));
+	counters[(*pair)->parent]++;
 }
 
 void print_pair(pair_t* pair)
@@ -36,19 +36,12 @@ curve_t* create_curve(node_t* parent_t , node_t* child_t)
 	return curve;
 }
 
-node_t** create_graph(int num_nodes , int num_curves , pair_t** pairs)
+node_t** create_graph(int num_nodes , int num_curves , pair_t** pairs , int* counters)
 {
 	node_t** nodes = (node_t**)calloc(num_nodes , sizeof(node_t*));
-	int counter = 0;
 	for (int i = 0 ; i < num_nodes ; ++i)
 	{
-		for (int j = 0 ; j < num_curves ; ++j)
-		{
-			if (pairs[j]->parent == i)
-				counter++;
-		}
-		nodes[i] = create_node(i , counter);
-		counter = 0;
+		nodes[i] = create_node(i , counters[i]);
 	}
 	for(int i = 0 ; i < num_curves ; ++i)
 	{
@@ -98,22 +91,21 @@ void BFS(node_t* start , matrix_t* matr , int num_nodes , int* glb_marks)
 		node_t* per = pop(q);
 		if (glb_marks[per->num] == 1)
 		{
-			for (int i = per->num ; i < num_nodes ; ++i)
+			for (int i = 0 ; i < num_nodes ; ++i)
 			{
-				if (matr->matr_buf[i][start->num] == '0')
+				if ((matr->matr_buf[i][per->num] == '1') && (matr->matr_buf[i][start->num] == '0'))
 					matr->matr_buf[i][start->num] = matr->matr_buf[i][per->num];
 			}
+			continue;
 		}
-		else
+
+		for (int i = 0 ; i < per->size ; ++i)
 		{
-			for (int i = 0 ; i < per->size ; ++i)
+			if (marks[per->out_curves[i]->child->num] == 0)
 			{
-				if (marks[per->out_curves[i]->child->num] == 0)
-				{
-					marks[per->out_curves[i]->child->num] = 1;
-					matr->matr_buf[per->out_curves[i]->child->num][start->num] = '1';
-					push(q , per->out_curves[i]->child);
-				}
+				marks[per->out_curves[i]->child->num] = 1;
+				matr->matr_buf[per->out_curves[i]->child->num][start->num] = '1';
+				push(q , per->out_curves[i]->child);
 			}
 		}
 	}
