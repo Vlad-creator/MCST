@@ -94,8 +94,13 @@ void BFS(node_t* start , matrix_t* matr , int num_nodes)
 		for (int i = 0 ; i < per->size ; ++i)
 		{
 			matr->matr_buf[per->out_curves[i]->child->num][per->num] = '1';
+			if (marks[per->out_curves[i]->child->num] == 0)
+			{
+				marks[per->out_curves[i]->child->num] = 1;
+				push(q , per->out_curves[i]->child);
+			}
 
-			for (int v = 0 ; v < per->num ; ++v)
+			for (int v = 0 ; v < num_nodes ; ++v)
 			{
 				if (matr->matr_buf[per->out_curves[i]->child->num][v] == '0')
 				{
@@ -112,7 +117,7 @@ void BFS(node_t* start , matrix_t* matr , int num_nodes)
 					}
 				}
 
-				if ((matr->matr_buf[per->num][v] == '0') || (matr->matr_buf[v][per->out_curves[i]->child->num] == '0'))
+				if ((matr->matr_buf[per->num][v] == '0'))
 				{
 					if (matr->matr_buf[per->num][per->out_curves[i]->child->num] == '1')
 					{
@@ -120,7 +125,13 @@ void BFS(node_t* start , matrix_t* matr , int num_nodes)
 						{
 							matr->matr_buf[per->num][v] = '1';
 						}
+					}	
+				}
 
+				if ((matr->matr_buf[v][per->out_curves[i]->child->num] == '0'))
+				{
+					if (matr->matr_buf[per->num][per->out_curves[i]->child->num] == '1')
+					{
 						if (matr->matr_buf[v][per->num] == '1')
 						{
 							matr->matr_buf[v][per->out_curves[i]->child->num] = '1';
@@ -128,13 +139,6 @@ void BFS(node_t* start , matrix_t* matr , int num_nodes)
 					}	
 				}
 
-			}
-
-
-			if (marks[per->out_curves[i]->child->num] == 0)
-			{
-				marks[per->out_curves[i]->child->num] = 1;
-				push(q , per->out_curves[i]->child);
 			}
 		}
 	}
