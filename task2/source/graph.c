@@ -94,11 +94,6 @@ void BFS(node_t* start , matrix_t* matr , int num_nodes)
 		for (int i = 0 ; i < per->size ; ++i)
 		{
 			matr->matr_buf[per->out_curves[i]->child->num][per->num] = '1';
-			if (marks[per->out_curves[i]->child->num] == 0)
-			{
-				marks[per->out_curves[i]->child->num] = 1;
-				push(q , per->out_curves[i]->child);
-			}
 
 			for (int v = 0 ; v < per->num ; ++v)
 			{
@@ -133,6 +128,13 @@ void BFS(node_t* start , matrix_t* matr , int num_nodes)
 					}	
 				}
 
+			}
+
+
+			if (marks[per->out_curves[i]->child->num] == 0)
+			{
+				marks[per->out_curves[i]->child->num] = 1;
+				push(q , per->out_curves[i]->child);
 			}
 		}
 	}
