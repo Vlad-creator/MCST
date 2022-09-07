@@ -42,4 +42,4 @@ void add_curve(node_t* node , curve_t* curve);
 node_t** create_graph(int num_nodes , int num_curves , pair_t** pairs , int* counters);
 void print_graph(node_t** nodes , int num_nodes);
 void delete_graph(node_t** nodes , int num_nodes);
-void BFS(node_t* start , matrix_t* matr , int num_nodes , int* glb_marks);
+void BFS(node_t* start , matrix_t* matr , int num_nodes);
