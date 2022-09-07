@@ -31,6 +31,43 @@ void print_matrix(matrix_t* matr)
 	}
 }
 
+int is_eq_matrix(matrix_t* matr1 , matrix_t* matr2 , int num)
+{
+	for (int i = 0 ; i < num ; ++i)
+	{
+		for (int j = 0 ; j < num ; ++j)
+		{
+			if (matr1->matr_buf[i][j] != matr2->matr_buf[i][j])
+				return 0;
+		}
+	}
+	return 1;
+}
+
+int convert_matrix(matrix_t* matr , int num)
+{
+	int res = 0;
+	for (int i = 0 ; i < num ; ++i)
+	{
+		for (int j = 0 ; j < num ; ++j)
+		{
+			if (matr->matr_buf[j][i] == '1')
+			{
+				for (int k = 0 ; k < num ; ++k)
+				{
+					if ((matr->matr_buf[k][j] == '1') && (matr->matr_buf[k][i] == '0'))
+					{
+						matr->matr_buf[k][i] = matr->matr_buf[k][j];
+						res = 1;
+					}
+				}
+			}
+			res = 0;
+		}
+	}
+	return res;
+}
+
 void delete_matrix(matrix_t* matr)
 {
 	for (int i = 0 ; i < matr->num_str ; ++i)

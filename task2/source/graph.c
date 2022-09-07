@@ -79,33 +79,60 @@ void delete_graph(node_t** nodes , int num_nodes)
 	free(nodes);
 }
 
-void BFS(node_t* start , matrix_t* matr , int num_nodes , int* glb_marks)
+void BFS(node_t* start , matrix_t* matr , int num_nodes)
 {
 	int* marks = (int*)calloc(num_nodes , sizeof(int));
 	queue_t* q = create_queue(num_nodes);
 	push(q , start);
 	marks[start->num] = 1;
-	matr->matr_buf[start->num][start->num] = '1';
+	int count = 0;
 	while(q->num != 0)
 	{
 		node_t* per = pop(q);
-		if (glb_marks[per->num] == 1)
-		{
-			for (int i = 0 ; i < num_nodes ; ++i)
-			{
-				if ((matr->matr_buf[i][per->num] == '1') && (matr->matr_buf[i][start->num] == '0'))
-					matr->matr_buf[i][start->num] = matr->matr_buf[i][per->num];
-			}
-			continue;
-		}
+		matr->matr_buf[per->num][per->num] = '1';
 
 		for (int i = 0 ; i < per->size ; ++i)
 		{
+			matr->matr_buf[per->out_curves[i]->child->num][per->num] = '1';
 			if (marks[per->out_curves[i]->child->num] == 0)
 			{
 				marks[per->out_curves[i]->child->num] = 1;
-				matr->matr_buf[per->out_curves[i]->child->num][start->num] = '1';
 				push(q , per->out_curves[i]->child);
+			}
+
+			for (int v = 0 ; v < per->num ; ++v)
+			{
+				if (matr->matr_buf[per->out_curves[i]->child->num][v] == '0')
+				{
+					if (matr->matr_buf[per->num][v] == '1')
+					{
+						matr->matr_buf[per->out_curves[i]->child->num][v] = '1';
+					}
+				}
+				if (matr->matr_buf[v][per->num] == '0')
+				{
+					if (matr->matr_buf[v][per->out_curves[i]->child->num] == '1')
+					{
+						matr->matr_buf[v][per->num] = '1';
+					}
+				}
+
+				if ((matr->matr_buf[per->num][v] == '0') || (matr->matr_buf[v][per->out_curves[i]->child->num] == '0'))
+				{
+					if (matr->matr_buf[per->num][per->out_curves[i]->child->num] == '1')
+					{
+						if (matr->matr_buf[per->out_curves[i]->child->num][v] == '1')
+						{
+							matr->matr_buf[per->num][v] = '1';
+						}
+
+						if (matr->matr_buf[v][per->num] == '1')
+						{
+							matr->matr_buf[v][per->out_curves[i]->child->num] = '1';
+						}
+					}	
+				}
+
 			}
 		}
 	}
